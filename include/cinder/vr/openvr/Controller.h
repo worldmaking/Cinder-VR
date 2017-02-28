@@ -78,6 +78,9 @@ public:
 	virtual ::vr::EVRButtonId				toOpenVr( ci::vr::Controller::ButtonId value ) const;
 	virtual ci::vr::Controller::ButtonId	fromOpenVr( ::vr::EVRButtonId value ) const;
 
+	bool									isTouched() { return mTouched; }
+	bool									isPressed() { return mPressed; }
+
 protected:
 	Controller( ::vr::TrackedDeviceIndex_t trackedDeviceIndex, ci::vr::Controller::Type type, ci::vr::Context *context );
 	friend class ci::vr::openvr::Context;
@@ -97,8 +100,8 @@ protected:
 	//ci::vr::Controller::HandId				mHandId = ci::vr::Controller::HAND_UNKNOWN;
 
 	uint32_t								mPacketNum = UINT32_MAX;
-	bool									mTrackPadTouched = false;
-	bool									mTriggerTouched = false;
+	bool									mTouched = false;
+	bool									mPressed = false;
 };
 
 }}} // namespace cinder::vr::vive
