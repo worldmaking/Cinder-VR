@@ -231,30 +231,30 @@ void Controller::processButtons( const ::vr::VRControllerState_t& state )
 void Controller::processTriggers( const ::vr::VRControllerState_t& state )
 {
 	const uint64_t buttonMask = ::vr::ButtonMaskFromId( ::vr::k_EButton_SteamVR_Trigger );
-	const bool isTouched = (buttonMask == ( state.ulButtonTouched & buttonMask));
-	const bool isPressed = (buttonMask == (state.ulButtonPressed & buttonMask));
+	const bool isTouched = ( buttonMask == ( state.ulButtonTouched & buttonMask ) );
 	float value = 0.0f;
-	if( isTouched || isPressed) {
+	if( isTouched ) {
 		value = state.rAxis[ci::vr::openvr::Controller::AXIS_INDEX_TRIGGER].x;
 	}
-	mTouched = isTouched;
-	mPressed = isPressed;
-	setTriggerValue( mTriggers[0].get(), value );
+	if( isTouched != mTriggerTouched ) {
+		mTriggerTouched = isTouched;
+		setTriggerValue( mTriggers[0].get(), value );
+	}
 }
 
 void Controller::processAxes( const ::vr::VRControllerState_t& state )
 {
-	const uint64_t buttonMask = ::vr::ButtonMaskFromId( ::vr::k_EButton_SteamVR_Touchpad );
-	const bool isTouched = (buttonMask == (state.ulButtonTouched & buttonMask));
-	const bool isPressed = (buttonMask == (state.ulButtonPressed & buttonMask));
+	const uint64_t buttonMasdk = ::vr::ButtonMaskFromId( ::vr::k_EButton_SteamVR_Touchpad );
+	const bool isTouched = ( buttonMasdk == ( state.ulButtonTouched & buttonMasdk ) );
 	ci::vec2 value = ci::vec2( 0.0f );
-	if(isTouched || isPressed) {
+	if(  isTouched ) {
 		value.x = state.rAxis[ci::vr::openvr::Controller::AXIS_INDEX_TOUCHPAD].x;
 		value.y = state.rAxis[ci::vr::openvr::Controller::AXIS_INDEX_TOUCHPAD].y;
 	}
-	mTouched = isTouched;
-	mPressed = isPressed;
-	setAxisValue( mAxes[0].get(), value );
+	if( isTouched != mTrackPadTouched ) {
+		mTrackPadTouched = isTouched;
+		setAxisValue( mAxes[0].get(), value );
+	}
 }
 
 void Controller::processControllerPose( const ci::mat4& inverseLookMatrix, const ci::mat4& inverseOriginMatrix, const ci::mat4& deviceToTrackingMatrix, const ci::mat4& trackingToDeviceMatrix )
